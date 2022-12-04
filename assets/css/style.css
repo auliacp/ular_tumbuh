@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url("../img/hutan.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.btn-atas {
+    margin-top: 160px;
+}
+
+.text {
+    display: inline-block;
+    font-size: 120px;
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    color: green;
+
+    overflow: hidden;
+    white-space: nowrap;
+    animation:
+        typing 1.5s forwards;
+    width: 0;
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+.btn-homez {
+    transition: .9s !important;
+    width: 250px;
+}
+
+.btn-homez:hover {
+    scale: 1.2;
+    background: aquamarine;
+}
+
+.buttonz {
+    margin-top: 250px;
+}
+
+img {
+    position: relative;
+    animation-name: example;
+    animation-duration: 1.5s;
+    animation-delay: 0.5s;
+
+}
+
+@keyframes example {
+    0% {
+        left: 0px;
+        top: 0px;
+    }
+
+    25% {
+        left: 50px;
+        top: 0px;
+    }
+
+    50% {
+        left: 0px;
+        top: 0px;
+    }
+
+    75% {
+        left: 50px;
+        top: 0px;
+    }
+
+    100% {
+        left: 0px;
+        top: 0px;
+    }
+
+}

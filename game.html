@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kelompok 1 - Ular Tunbuh</title>
+    <meta content="Uler Tumbuh" name="title">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="TEDx,TEDxUNDIP,Universitas Diponegoro,hackaton,revealthesun,undip,TEDxundip,TEDx2022"
+        name="keywords">
+    <meta
+        content="One of the greatest game is finally back! Prepare yourself and get ready to be part of Uler Tumbuh~! Be there or be square."
+        name="description">
+    <!-- cannonical -->
+    <link rel="canonical" hreflang="id" href="https://ular-tumbuh.netlify.com/index.html">
+    <link rel="alternate" hreflang="en" href="https://ular-tumbuh.netlify.com/index.html">
+    <link rel="alternate" hreflang="x-default" href="https://ular-tumbug.netlify.com/index.html">
+    <!-- cannonical ends -->
+    <!-- open graph -->
+    <meta property="og:title" content="ULER TUMBUH V.0.0.1">
+    <meta property="og:url" content="https://ular-tumbuh.netlify.com/index.html">
+    <meta property="og:image" content="./assets/img/og-image.png">
+    <meta property="og:description"
+        content="One of the greatest event is finally back! Prepare yourself and get ready to be part of Uler Tumbuh~! Be there or be square.">
+    <!-- open graph ends-->
+    <!-- Favicons -->
+    <link href="./assets/img/snake.png" rel="icon">
+    <link href="./assets/img/snake.png" rel="apple-touch-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <style>
+        @media (min-width:1200px) {
+            body {
+                background: url('./assets/img/bg.webp');
+                background-size: cover;
+            }
+        }
+
+        .btn {
+            transition: .6s;
+        }
+
+        .btn:hover {
+            scale: 1.2;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="game" class="mt-lg-5 w-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-light text-center">Ular Tumbuh</h1>
+                </div>
+            </div>
+            <div class="row mt-lg-3">
+                <div class="col-lg-12 text-center align-items-center">
+                    <div class='game'>
+                        <div id='home'>
+                            <canvas id='mycanvas' width='1100' height='550'>
+                            </canvas>
+                        </div>
+                        <button id='btn' class="btn btn-success d-none">START</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-lg-3">
+                <div class="col-lg-12 text-center">
+                    <a role="button" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#exit">
+                        Exit
+                    </a>
+                    <a role="button" class="btn btn-homez btn-info" data-bs-toggle="modal" data-bs-target="#options">
+                        Tutorial
+                    </a>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="options" tabindex="-1" aria-labelledby="optionsLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background: #6d8b74;">
+                        <div class="modal-header" style="background: #5f7161;">
+                            <h5 class="text-light" id="optionsLabel">How To Play!</h5>
+                        </div>
+                        <div class="modal-body text-light">
+                            ↑ : Arah ke atas
+                            <br>
+                            ↓ : Arah ke bawah
+                            <br>
+                            → : Arah ke kanan
+                            <br>
+                            ← : Arah ke kiri
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="exit" tabindex="-1" aria-labelledby="exitLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background: #6d8b74;">
+                        <div class="modal-header" style="background: #5f7161;">
+                            <h5 class="text-light" id="exitLabel">Exit</h5>
+                        </div>
+                        <div class="modal-body text-light">
+                            Sure to exit?
+                        </div>
+                        <div class="modal-footer">
+                            <a role="button" class="btn btn-danger" href="./index.html">Exit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- third party -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script>
+        let notyf = new Notyf({
+            duration: 2000,
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+        });
+        notyf.success('Game Accessed, Have Fun !');
+    </script>
+    <!-- own js -->
+    <script>
+        let mycanvas = document.getElementById('mycanvas');
+        let ctx = mycanvas.getContext('2d');
+        let snakeSize = 10;
+        let w = 1100;
+        let h = 550;
+        let score = 0;
+        let snake;
+        let food;
+        let drawModule = (function () {
+            let bodySnake = (x, y) => {
+                ctx.fillStyle = 'green';
+                ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+                ctx.strokeStyle = 'darkgreen';
+                ctx.strokeRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+            }
+            let pizza = (x, y) => {
+                ctx.fillStyle = 'yellow';
+                ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x * snakeSize + 1, y * snakeSize + 1, snakeSize - 2, snakeSize - 2);
+            }
+            let scoreText = () => {
+                ctx.font = "19px Arial";
+                var score_text = "Score: " + score;
+                ctx.fillStyle = 'lightblue';
+                ctx.fillText(score_text, 145, h - 19);
+            }
+            let drawSnake = () => {
+                var length = 4;
+                snake = [];
+                for (var i = length - 1; i >= 0; i--) {
+                    snake.push({ x: i, y: 0 });
+                }
+            }
+            let paint = () => {
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, w, h);
+                ctx.strokeStyle = 'black';
+                ctx.strokeRect(0, 0, w, h);
+                btn.setAttribute('disabled', true);
+                var snakeX = snake[0].x;
+                var snakeY = snake[0].y;
+                if (direction == 'right') {
+                    snakeX++;
+                }
+                else if (direction == 'left') {
+                    snakeX--;
+                }
+                else if (direction == 'up') {
+                    snakeY--;
+                } else if (direction == 'down') {
+                    snakeY++;
+                }
+                if (snakeX == -1 || snakeX == w / snakeSize || snakeY == -1 || snakeY == h / snakeSize || checkCollision(snakeX, snakeY, snake)) {
+                    //restart game
+                    btn.removeAttribute('disabled', true);
+                    ctx.clearRect(0, 0, w, h);
+                    gameloop = clearInterval(gameloop);
+                    return;
+                }
+                if (snakeX == food.x && snakeY == food.y) {
+                    var tail = { x: snakeX, y: snakeY }; //buat head baru
+                    score++;
+                    createFood(); //buat food
+                } else {
+                    var tail = snake.pop();
+                    tail.x = snakeX;
+                    tail.y = snakeY;
+                }
+                //ular memakan food
+                snake.unshift(tail); //taruh tail pada first cell
+                for (var i = 0; i < snake.length; i++) {
+                    bodySnake(snake[i].x, snake[i].y);
+                }
+                pizza(food.x, food.y);
+                scoreText();
+            }
+            let createFood = () => {
+                food = {
+                    x: Math.floor((Math.random() * 30) + 1),
+                    y: Math.floor((Math.random() * 30) + 1)
+                }
+                for (var i = 0; i < snake.length; i++) {
+                    var snakeX = snake[i].x;
+                    var snakeY = snake[i].y;
+                    // pindah food kalau kena collission
+                    if (food.x === snakeX && food.y === snakeY || food.y === snakeY && food.x === snakeX) {
+                        food.x = Math.floor((Math.random() * 30) + 1);
+                        food.y = Math.floor((Math.random() * 30) + 1);
+                    }
+                }
+            }
+            let checkCollision = (x, y, array) => {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].x === x && array[i].y === y)
+                        return true;
+                }
+                return false;
+            }
+            let init = () => {
+                direction = 'down';
+                drawSnake();
+                createFood();
+                gameloop = setInterval(paint, 80);
+            }
+            return {
+                init: init
+            };
+        }());
+        (function (window, document, drawModule) {
+            window.onload = function () {
+                drawModule.init();
+            }
+            document.onkeydown = function (event) {
+                keyCode = window.event.keyCode;
+                keyCode = event.keyCode;
+                switch (keyCode) {
+                    case 37:
+                        if (direction != 'right') {
+                            direction = 'left';
+                        }
+                        console.log('left');
+                        break;
+                    case 39:
+                        if (direction != 'left') {
+                            direction = 'right';
+                            console.log('right');
+                        }
+                        break;
+                    case 38:
+                        if (direction != 'down') {
+                            direction = 'up';
+                            console.log('up');
+                        }
+                        break;
+                    case 40:
+                        if (direction != 'up') {
+                            direction = 'down';
+                            console.log('down');
+                        }
+                        break;
+                }
+            }
+        })(window, document, drawModule);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
